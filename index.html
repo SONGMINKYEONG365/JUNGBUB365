@@ -8,9 +8,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Pretendard:wght@300;400;500;700&display=swap" rel="stylesheet">
     
     <!-- App Icon Configuration -->
-    <!-- 사용자가 'favicon.png' 파일을 루트 경로에 추가하면 자동으로 적용됩니다. -->
-    <link rel="icon" type="image/png" href="favicon.png" />
-    <link rel="apple-touch-icon" href="favicon.png" />
+    <!-- Vercel 배포 환경에 맞춰 절대 경로(/)로 수정 -->
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/favicon.png" />
 
     <script>
       tailwind.config = {
@@ -69,7 +69,9 @@
     "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
     "lucide-react": "https://aistudiocdn.com/lucide-react@^0.555.0",
     "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
-    "html2canvas": "https://aistudiocdn.com/html2canvas@^1.4.1"
+    "html2canvas": "https://aistudiocdn.com/html2canvas@^1.4.1",
+    "vite": "https://aistudiocdn.com/vite@^7.2.4",
+    "@vitejs/plugin-react": "https://aistudiocdn.com/@vitejs/plugin-react@^5.1.1"
   }
 }
 </script>
