@@ -7,13 +7,11 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Pretendard:wght@300;400;500;700&display=swap" rel="stylesheet">
     
-    <!-- App Icon Configuration -->
-    <!-- Vercel 배포 환경에 맞춰 절대 경로(/)로 수정 -->
-    <link rel="icon" type="image/png" href="/favicon.png" />
-    <link rel="apple-touch-icon" href="/favicon.png" />
+    <link rel="icon" type="image/png" href="./favicon.png" />
+    <link rel="apple-touch-icon" href="./favicon.png" />
 
     <script>
-      tailwind.config = {
+      window.tailwind.config = {
         theme: {
           extend: {
             fontFamily: {
@@ -22,21 +20,18 @@
             },
             colors: {
               paper: '#faf9f6',
-              ink: '#2b2b2b',
+              ink: '#1a1a1a',
+              navy: '#121420',
+              gold: '#d4af37',
+              'gold-light': '#f3e5ab',
             },
             animation: {
-              'fade-in': 'fadeIn 0.8s ease-out',
-              'slide-up': 'slideUp 0.8s ease-out',
+              'fade-in': 'fadeIn 0.5s ease-out',
+              'slide-up': 'slideUp 0.6s ease-out',
             },
             keyframes: {
-              fadeIn: {
-                '0%': { opacity: '0' },
-                '100%': { opacity: '1' },
-              },
-              slideUp: {
-                '0%': { transform: 'translateY(20px)', opacity: '0' },
-                '100%': { transform: 'translateY(0)', opacity: '1' },
-              }
+              fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+              slideUp: { '0%': { transform: 'translateY(20px)', opacity: '0' }, '100%': { transform: 'translateY(0)', opacity: '1' } },
             }
           },
         },
@@ -46,19 +41,27 @@
       body {
         font-family: 'Pretendard', sans-serif;
         background-color: #e3e1db;
+        overflow-x: hidden;
       }
-      /* Ink Effect: Simulates ink bleeding into paper */
       .text-ink {
         color: #1a1a1a;
         mix-blend-mode: multiply;
         opacity: 0.9;
-        text-shadow: 0 0 1px rgba(0,0,0,0.05); /* Very subtle bleed */
       }
       .glass-card {
-        background: rgba(255, 255, 255, 0.7);
+        background: rgba(255, 255, 255, 0.95);
         backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
         border: 1px solid rgba(255, 255, 255, 0.5);
+      }
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 4px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #d4af37;
+        border-radius: 10px;
       }
     </style>
   <script type="importmap">
@@ -78,6 +81,6 @@
 </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="/index.tsx"></script>
+    <script type="module" src="./index.tsx"></script>
   </body>
 </html>

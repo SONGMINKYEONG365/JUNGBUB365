@@ -1,10 +1,11 @@
-import { GoogleGenAI, Type, Schema } from "@google/genai";
+import { GoogleGenAI, Type } from "@google/genai";
 import { Quote } from "../types";
 import { FIXED_QUOTES } from "./quotesData";
 
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
-const quoteSchema: Schema = {
+// Fix: Removed Schema type annotation as it is deprecated. Defining schema as a plain object using 'Type' from @google/genai.
+const quoteSchema = {
   type: Type.OBJECT,
   properties: {
     quote: {
@@ -28,7 +29,6 @@ const quoteSchema: Schema = {
   required: ["quote", "author", "meaning", "tags"],
 };
 
-// Helper to get a random key from FIXED_QUOTES
 export const getRandomQuoteKey = (): string => {
   const keys = Object.keys(FIXED_QUOTES);
   if (keys.length === 0) return "1/1";
@@ -37,56 +37,47 @@ export const getRandomQuoteKey = (): string => {
 };
 
 export const generateQuoteOfDay = async (date: Date): Promise<Quote> => {
-  const dateString = date.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' });
-  
-  // 1. Check if we have a fixed quote for this Month/Day in our database
   const month = date.getMonth() + 1;
   const day = date.getDate();
   const dateKey = `${month}/${day}`;
   const fixedContent = FIXED_QUOTES[dateKey];
 
-  // 2. IMPORTANT: If fixed content exists, use it DIRECTLY. Do NOT call AI.
-  // This ensures the data is displayed exactly as entered by the user.
+  // Priority 1: Use Fixed Database
   if (fixedContent) {
     return {
       quote: fixedContent,
-      author: "", // User requested to hide author
-      meaning: "", // User requested to hide meaning
-      tags: []    // User requested to hide tags
+      author: "",
+      meaning: "",
+      tags: []
     };
   }
 
-  // 3. Only if no data exists, fall back to AI generation
+  // Priority 2: AI Generation as Fallback
+  const dateString = date.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' });
   const prompt = `
       Today is ${dateString}.
-      Please act as a wise philosopher and curator.
-      Provide a profound, inspiring, and unique quote suitable for today.
-      The quote can be from famous historical figures, philosophers, writers, or successful modern leaders.
-      Prefer quotes that are timeless and offer deep insight into life, success, happiness, or resilience.
-      The response MUST be in Korean.
+      Provide a profound, inspiring Korean quote.
   `;
 
   try {
     const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
+      model: 'gemini-3-flash-preview', // Updated to the latest recommended model
       contents: prompt,
       config: {
         responseMimeType: "application/json",
         responseSchema: quoteSchema,
-        systemInstruction: "You are a wise mentor providing daily wisdom in Korean. Ensure the tone is polite, encouraging, and sophisticated.",
+        systemInstruction: "You are a wise mentor providing daily wisdom in Korean. Keep it sophisticated and brief.",
         temperature: 0.7, 
       },
     });
 
+    // Fix: Access .text property directly, do not call it as a method.
     const jsonText = response.text;
-    if (!jsonText) {
-        throw new Error("Empty response from AI");
-    }
+    if (!jsonText) throw new Error("Empty response");
     
     return JSON.parse(jsonText) as Quote;
   } catch (error) {
     console.error("Error generating quote:", error);
-    // Fallback quote in case of API failure
     return {
       quote: "위대한 업적은 대개 커다란 희생을 치른 결과이다.",
       author: "",
